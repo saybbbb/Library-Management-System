@@ -39,7 +39,7 @@ public class LoginForm {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Open Registration Form
-                JFrame registrationFrame = new JFrame("Create Account");
+                JFrame registrationFrame = new JFrame("Registration Form");
                 RegistrationForm registrationForm = new RegistrationForm();
                 registrationFrame.setContentPane(new RegistrationForm().getMainPanel());
                 registrationFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
