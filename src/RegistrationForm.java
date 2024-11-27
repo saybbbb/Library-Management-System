@@ -10,7 +10,7 @@ public class RegistrationForm {
     private JTextField usernameField;
     private JPasswordField passwordField;
     private JButton registerButton;
-    private JButton backToLoginButton;
+    private JButton signInButton;
     private JLabel messageLabel;
 
     public JPanel getMainPanel() {
@@ -45,7 +45,7 @@ public class RegistrationForm {
         });
 
         // Action for Back to Login Button
-        backToLoginButton.addActionListener(new ActionListener() {
+        signInButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Open Login Form
