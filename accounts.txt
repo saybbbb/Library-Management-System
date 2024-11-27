@@ -1,0 +1,3 @@
+admin1,adminpass,admin
+user1,password123,user
+cyber,chita123,user

@@ -19,10 +19,6 @@ public class Main {
         loginFrame.setVisible(true); // Show the frame
     }
 
-    /**
-     * Ensures that the accounts.txt file exists.
-     * If the file doesn't exist, it will create it.
-     */
     private static void ensureAccountsFileExists() {
         File file = new File("accounts.txt");
         if (!file.exists()) {

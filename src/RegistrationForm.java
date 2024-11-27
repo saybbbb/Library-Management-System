@@ -30,16 +30,15 @@ public class RegistrationForm {
                     return;
                 }
 
-                try (BufferedWriter writer = new BufferedWriter(new FileWriter("accounts.txt", true))) {
-                    writer.write(username + "," + password);
-                    writer.newLine();
-                    JOptionPane.showMessageDialog(mainPanel, "Registration Successful!");
+                // Add the account with "user" role
+                boolean success = addAccount(username, password, "user");
+                if (success) {
+                    JOptionPane.showMessageDialog(mainPanel, "Account created successfully!");
+                    messageLabel.setText("");
                     usernameField.setText("");
                     passwordField.setText("");
-                    messageLabel.setText("");
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                    messageLabel.setText("Error saving account.");
+                } else {
+                    messageLabel.setText("Error creating account. Please try again.");
                 }
             }
         });
@@ -50,7 +49,6 @@ public class RegistrationForm {
             public void actionPerformed(ActionEvent e) {
                 // Open Login Form
                 JFrame loginFrame = new JFrame("Login Form");
-                LoginForm loginForm = new LoginForm();
                 loginFrame.setContentPane(new LoginForm().getMainPanel());
                 loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 loginFrame.pack();
@@ -58,8 +56,19 @@ public class RegistrationForm {
                 loginFrame.setVisible(true);
 
                 // Close current Registration Form
-                ((JFrame) SwingUtilities.getWindowAncestor(mainPanel)).dispose();
+                SwingUtilities.getWindowAncestor(mainPanel).dispose();
             }
         });
+    }
+
+    private boolean addAccount(String username, String password, String role) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("accounts.txt", true))) {
+            writer.write(username + "," + password + "," + role);
+            writer.newLine();
+            return true;
+        } catch (IOException e) {
+            System.out.println("Error writing to accounts.txt: " + e.getMessage());
+            return false;
+        }
     }
 }
