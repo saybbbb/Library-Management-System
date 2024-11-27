@@ -44,6 +44,7 @@ public class LoginForm {
                 registrationFrame.setContentPane(new RegistrationForm().getMainPanel());
                 registrationFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 registrationFrame.pack();
+                registrationFrame.setLocationRelativeTo(null);
                 registrationFrame.setVisible(true);
 
                 // Close current Login Form
@@ -79,12 +80,4 @@ public class LoginForm {
         }
         return false; // No match found
     }
-
-    /*public static void main(String[] args) {
-        JFrame frame = new JFrame("Login Form");
-        frame.setContentPane(new LoginForm().mainPanel);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setVisible(true);
-    }*/
 }

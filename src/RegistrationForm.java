@@ -54,6 +54,7 @@ public class RegistrationForm {
                 loginFrame.setContentPane(new LoginForm().getMainPanel());
                 loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 loginFrame.pack();
+                loginFrame.setLocationRelativeTo(null);
                 loginFrame.setVisible(true);
 
                 // Close current Registration Form

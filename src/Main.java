@@ -14,7 +14,8 @@ public class Main {
         JFrame loginFrame = new JFrame("Login Form");
         loginFrame.setContentPane(loginForm.getMainPanel()); // Set the content pane to the main panel from LoginForm
         loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Close the app when window is closed
-        loginFrame.pack();  // Resize the frame to fit the components
+        loginFrame.pack(); // Resize the frame to fit the components
+        loginFrame.setLocationRelativeTo(null); // Center the JFrame on the screen
         loginFrame.setVisible(true); // Show the frame
     }
 
