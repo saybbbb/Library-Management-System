@@ -11,7 +11,7 @@ public class LoginForm {
     private JPasswordField passwordField;
     private JButton loginButton;
     private JButton createAccountButton;
-    private JLabel messageLabel;
+
 
     public JPanel getMainPanel() {
         return mainPanel;
@@ -28,16 +28,23 @@ public class LoginForm {
                 String role = validateCredentials(username, password);
                 if (role != null) {
                     if (role.equals("admin")) {
-                        JOptionPane.showMessageDialog(mainPanel, "Welcome Admin!");
-                        messageLabel.setText("");
-                        // Open Admin Dashboard
+                        JOptionPane.showMessageDialog(mainPanel, "Welcome");
+                        // TODO: Open Admin Dashboard
                     } else if (role.equals("user")) {
-                        JOptionPane.showMessageDialog(mainPanel, "Welcome User!");
-                        messageLabel.setText("");
+                        JOptionPane.showMessageDialog(mainPanel, "Welcome " + username.substring(0, 1).toUpperCase() + username.substring(1) + "!");
                         // Open User Dashboard
+                        JFrame userDashboardFrame = new JFrame("User Dashboard");
+                        userDashboardFrame.setContentPane(new UserDashboardForm().getMainPanel()); // Use the main panel of UserDashboardForm
+                        userDashboardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                        userDashboardFrame.pack();
+                        userDashboardFrame.setLocationRelativeTo(null); // Center the frame
+                        userDashboardFrame.setVisible(true);
+
+                        // Hide or dispose of the LoginForm
+                        SwingUtilities.getWindowAncestor(mainPanel).dispose();
                     }
                 } else {
-                    messageLabel.setText("Invalid username or password.");
+                    JOptionPane.showMessageDialog(mainPanel, "Invalid username or password.");
                 }
             }
         });

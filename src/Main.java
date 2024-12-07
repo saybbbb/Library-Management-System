@@ -5,7 +5,8 @@ import java.io.IOException;
 public class Main {
     public static void main(String[] args) {
         // Ensure the accounts.txt file exists
-        ensureAccountsFileExists();
+        ensureFileExists("accounts.txt");
+        ensureFileExists("books.txt");
 
         // Create an instance of LoginForm
         LoginForm loginForm = new LoginForm();
@@ -19,22 +20,25 @@ public class Main {
         loginFrame.setVisible(true); // Show the frame
     }
 
-    private static void ensureAccountsFileExists() {
-        File file = new File("accounts.txt");
+    private static void ensureFileExists(String fileName) {
+        File file = new File(fileName);
         if (!file.exists()) {
             try {
                 // Create a new file if it doesn't exist
                 boolean created = file.createNewFile();
                 if (created) {
-                    System.out.println("accounts.txt file created.");
+                    System.out.println(fileName + " file created.");
                 } else {
-                    System.out.println("Error creating accounts.txt file.");
+                    System.out.println("Error creating " + fileName + " file.");
                 }
             } catch (IOException e) {
-                System.out.println("Error checking or creating accounts.txt: " + e.getMessage());
+                System.out.println("Error checking or creating " + fileName + ": " + e.getMessage());
             }
         } else {
-            System.out.println("accounts.txt file already exists.");
+            System.out.println(fileName + " file already exists.");
         }
     }
 }
+
+// TODO: New Login Page
+// TODO: Add image
