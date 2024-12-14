@@ -7,6 +7,7 @@ public class Main {
         // Ensure the accounts.txt file exists
         ensureFileExists("accounts.txt");
         ensureFileExists("books.txt");
+        ensureFileExists("history.txt");
 
         // Create an instance of LoginForm
         LoginForm loginForm = new LoginForm();
@@ -40,5 +41,5 @@ public class Main {
     }
 }
 
-// TODO: New Login Page
-// TODO: Add image
+// TODO: Fix return book
+// TODO: Refresh table column size

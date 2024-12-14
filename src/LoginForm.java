@@ -31,10 +31,12 @@ public class LoginForm {
                         JOptionPane.showMessageDialog(mainPanel, "Welcome");
                         // TODO: Open Admin Dashboard
                     } else if (role.equals("user")) {
-                        JOptionPane.showMessageDialog(mainPanel, "Welcome " + username.substring(0, 1).toUpperCase() + username.substring(1) + "!");
+                        JOptionPane.showMessageDialog(mainPanel, "Welcome " + username + "!");
                         // Open User Dashboard
+                        // Replace with the logged-in user's name
+                        UserDashboardForm userDashboard = new UserDashboardForm(username);
                         JFrame userDashboardFrame = new JFrame("User Dashboard");
-                        userDashboardFrame.setContentPane(new UserDashboardForm().getMainPanel()); // Use the main panel of UserDashboardForm
+                        userDashboardFrame.setContentPane(userDashboard.getMainPanel()); // Use the main panel of UserDashboardForm
                         userDashboardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                         userDashboardFrame.pack();
                         userDashboardFrame.setLocationRelativeTo(null); // Center the frame
