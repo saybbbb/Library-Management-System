@@ -12,10 +12,7 @@ public class LoginForm {
     private JButton loginButton;
     private JButton createAccountButton;
 
-
-    public JPanel getMainPanel() {
-        return mainPanel;
-    }
+    public JPanel getMainPanel() {return mainPanel;}
 
     public LoginForm() {
         // Action for Login Button
@@ -28,20 +25,25 @@ public class LoginForm {
                 String role = validateCredentials(username, password);
                 if (role != null) {
                     if (role.equals("admin")) {
-                        JOptionPane.showMessageDialog(mainPanel, "Welcome");
-                        // TODO: Open Admin Dashboard
+                        JOptionPane.showMessageDialog(mainPanel, "Welcome admin!");
+                        AdminDashboardForm adminDashboard = new AdminDashboardForm();
+                        JFrame adminDashboardFrame = new JFrame("Admin Menu");
+                        adminDashboardFrame.setContentPane(adminDashboard.getMainPanel());
+                        adminDashboardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                        adminDashboardFrame.pack();
+                        adminDashboardFrame.setLocationRelativeTo(null);
+                        adminDashboardFrame.setVisible(true);
+                        // Hide or dispose of the LoginForm
+                        SwingUtilities.getWindowAncestor(mainPanel).dispose();
                     } else if (role.equals("user")) {
                         JOptionPane.showMessageDialog(mainPanel, "Welcome " + username + "!");
-                        // Open User Dashboard
-                        // Replace with the logged-in user's name
                         UserDashboardForm userDashboard = new UserDashboardForm(username);
-                        JFrame userDashboardFrame = new JFrame("User Dashboard");
-                        userDashboardFrame.setContentPane(userDashboard.getMainPanel()); // Use the main panel of UserDashboardForm
+                        JFrame userDashboardFrame = new JFrame("User Menu");
+                        userDashboardFrame.setContentPane(userDashboard.getMainPanel());
                         userDashboardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                         userDashboardFrame.pack();
-                        userDashboardFrame.setLocationRelativeTo(null); // Center the frame
+                        userDashboardFrame.setLocationRelativeTo(null);
                         userDashboardFrame.setVisible(true);
-
                         // Hide or dispose of the LoginForm
                         SwingUtilities.getWindowAncestor(mainPanel).dispose();
                     }
@@ -87,6 +89,6 @@ public class LoginForm {
         } catch (IOException e) {
             JOptionPane.showMessageDialog(mainPanel, "Error reading accounts file.", "Error", JOptionPane.ERROR_MESSAGE);
         }
-        return null; // Return null if credentials are invalid
+        return null;
     }
 }

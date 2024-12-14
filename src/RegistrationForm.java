@@ -3,7 +3,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 
-
 public class RegistrationForm {
     public JPanel mainPanel;
     private JTextField usernameField;
@@ -14,8 +13,6 @@ public class RegistrationForm {
     public JPanel getMainPanel() {
         return mainPanel;
     }
-
-
 
     public RegistrationForm() {
         // Action for Register Button

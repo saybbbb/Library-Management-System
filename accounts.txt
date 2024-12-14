@@ -6,3 +6,4 @@ dennis,12345,user
 ggll,Gastador,user
 storm,gwapo123,user
 1,1,user
+2,2,admin

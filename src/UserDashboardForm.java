@@ -11,6 +11,7 @@ public class UserDashboardForm {
     private JButton borrowButton;
     private JButton viewHistoryButton;
     private JButton returnButton;
+    private JButton logoutButton;
     private DefaultTableModel tableModel;
 
     public JPanel getMainPanel() {
@@ -19,30 +20,48 @@ public class UserDashboardForm {
 
     private Map<String, List<String>> userBorrowedBooks = new HashMap<>();
 
+    private Map<String, List<String>> loadUserBorrowedBooks(String currentUser) {
+        Map<String, List<String>> borrowedBooks = new HashMap<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader("borrowed_books.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (!borrowedBooks.containsKey(parts[0])) {
+                    borrowedBooks.put(parts[0], new ArrayList<>());
+                }
+                borrowedBooks.get(parts[0]).add(parts[1]);
+            }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(mainPanel, "Error reading borrowed books: " + e.getMessage());
+        }
+        return borrowedBooks;
+    }
+
+    private void saveUserBorrowedBooks() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("borrowed_books.txt"))) {
+            for (Map.Entry<String, List<String>> entry : userBorrowedBooks.entrySet()) {
+                String username = entry.getKey();
+                for (String bookId : entry.getValue()) {
+                    writer.write(username + "," + bookId);
+                    writer.newLine();
+                }
+            }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(mainPanel, "Error saving borrowed books: " + e.getMessage());
+        }
+    }
+
     public UserDashboardForm(String currentUser) {
+        userBorrowedBooks = loadUserBorrowedBooks(currentUser);
         initializeTable();
         addSearchFunctionality();
         addButtonLogic(currentUser);
         userBorrowedBooks.putIfAbsent(currentUser, new ArrayList<>());
     }
 
-//    private void initializeTable() {
-//        String[] columnNames = {"Book ID", "Book Title", "Book Author", "Available"};
-//        Object[][] data = loadDataFromFile("books.txt"); // Load data from file
-//        tableModel = new DefaultTableModel(data, columnNames) {
-//            @Override
-//            public boolean isCellEditable(int row, int column) {
-//                return false; // Make table cells non-editable
-//            }
-//        };
-//
-//        bookTable.setModel(tableModel);
-//        bookTable.getTableHeader().setReorderingAllowed(false);
-//        bookTable.getTableHeader().setResizingAllowed(false);
-//    }
-
     private void initializeTable() {
         String[] columnNames = {"Book ID", "Book Title", "Book Author", "Available"};
+        Object[][] data = loadDataFromFile("books.txt");
         tableModel = new DefaultTableModel(null, columnNames) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -106,7 +125,14 @@ public class UserDashboardForm {
 
                     String bookTitle = bookTable.getValueAt(row, 1).toString();
                     bookTable.setValueAt("No", row, 3); // Update availability to "No"
-                    userBorrowedBooks.get(currentUser).add(bookId); // Add to borrowed books list
+
+                    // Ensure the user's list exists and add the book
+                    userBorrowedBooks.putIfAbsent(currentUser, new ArrayList<>());
+                    userBorrowedBooks.get(currentUser).add(bookId);
+
+                    // Persist borrowed books
+                    saveUserBorrowedBooks();
+
                     saveHistory(currentUser, "Borrowed", bookId, bookTitle);
                     updateBooksFile();
                     JOptionPane.showMessageDialog(mainPanel, "You have successfully borrowed: " + bookTitle);
@@ -129,8 +155,10 @@ public class UserDashboardForm {
                 return;
             }
 
-            // Check if the user has borrowed the book
+            // Get the list of borrowed books for the current user
             List<String> borrowedBooks = userBorrowedBooks.getOrDefault(currentUser, new ArrayList<>());
+
+            // Check if the user has borrowed the book
             if (!borrowedBooks.contains(bookId)) {
                 JOptionPane.showMessageDialog(mainPanel, "You cannot return a book you did not borrow.");
                 return;
@@ -172,9 +200,14 @@ public class UserDashboardForm {
                 return;
             }
 
-            // Update user's borrowed list and save history
+            // Remove the book from the user's borrowed list
             borrowedBooks.remove(bookId);
             userBorrowedBooks.put(currentUser, borrowedBooks);
+
+            // Persist the updated borrowed books
+            saveUserBorrowedBooks();
+
+            // Save return history
             saveHistory(currentUser, "Returned", bookId, bookTitle);
 
             JOptionPane.showMessageDialog(mainPanel, "You have successfully returned: " + bookTitle);
@@ -184,17 +217,60 @@ public class UserDashboardForm {
         });
 
         viewHistoryButton.addActionListener(e -> {
-            List<String> userHistory = getUserHistory(currentUser);
+            List<String[]> userHistory = getUserHistory(currentUser);
             if (userHistory.isEmpty()) {
                 JOptionPane.showMessageDialog(mainPanel, "No history found for you.");
             } else {
-                StringBuilder history = new StringBuilder("Your History:\n");
-                for (String entry : userHistory) {
-                    history.append(entry).append("\n");
-                }
-                JOptionPane.showMessageDialog(mainPanel, history.toString());
+                showUserHistoryDialog(userHistory);
             }
         });
+
+        logoutButton.addActionListener(e -> {
+            JFrame loginFrame = new JFrame("Login Form");
+            LoginForm loginForm = new LoginForm();
+            loginFrame.setContentPane(loginForm.getMainPanel()); // Set the content pane to the main panel from LoginForm
+            loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Close the app when window is closed
+            loginFrame.pack(); // Resize the frame to fit the components
+            loginFrame.setLocationRelativeTo(null); // Center the JFrame on the screen
+            loginFrame.setVisible(true); // Show the frame
+
+            SwingUtilities.getWindowAncestor(mainPanel).dispose();
+        });
+    }
+
+    private void showUserHistoryDialog(List<String[]> userHistory) {
+        // Create column names for the history table
+        String[] columnNames = {"Action", "Book ID", "Book Title", "Date and Time"};
+
+        // Convert history to 2D array for table model
+        Object[][] historyData = new Object[userHistory.size()][4];
+        for (int i = 0; i < userHistory.size(); i++) {
+            String[] historyEntry = userHistory.get(i);
+            historyData[i] = new Object[]{
+                    historyEntry[1],  // Action
+                    historyEntry[2],  // Book ID
+                    historyEntry[3],  // Book Title
+                    historyEntry[4]   // Timestamp
+            };
+        }
+
+        DefaultTableModel historyTableModel = new DefaultTableModel(historyData, columnNames) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Make table cells non-editable
+            }
+        };
+
+        JTable historyTable = new JTable(historyTableModel);
+        JScrollPane scrollPane = new JScrollPane(historyTable);
+        scrollPane.setPreferredSize(new java.awt.Dimension(500, 300));
+
+        JOptionPane.showMessageDialog(
+                mainPanel,
+                scrollPane,
+                "Your Borrowing History",
+                JOptionPane.PLAIN_MESSAGE
+        );
     }
 
     private void refreshTable() {
@@ -256,21 +332,22 @@ public class UserDashboardForm {
 
     private void saveHistory(String username, String action, String bookId, String bookTitle) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("history.txt", true))) {
-            writer.write(username + "," + action + "," + bookId + "," + bookTitle);
+            String timestamp = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date());
+            writer.write(username + "," + action + "," + bookId + "," + bookTitle + "," + timestamp);
             writer.newLine();
         } catch (IOException e) {
             JOptionPane.showMessageDialog(mainPanel, "Error saving history: " + e.getMessage());
         }
     }
 
-    private List<String> getUserHistory(String username) {
-        List<String> history = new ArrayList<>();
+    private List<String[]> getUserHistory(String username) {
+        List<String[]> history = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader("history.txt"))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
                 if (parts[0].equals(username)) {
-                    history.add(parts[1] + " - " + parts[2] + " - " + parts[3]);
+                    history.add(parts);
                 }
             }
         } catch (IOException e) {
@@ -285,7 +362,6 @@ public class UserDashboardForm {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] values = line.split(",");
-                System.out.println("Loaded book: " + Arrays.toString(values)); // Debug print
                 data.add(values); // Add each book record as a row
             }
         } catch (IOException e) {

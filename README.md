@@ -34,7 +34,7 @@ This system aims to provide a user-friendly interface for efficient library oper
 ## 🛠️ Technologies Used
 - **Programming Language**: Java
 - **GUI Framework**: Swing (IntelliJ IDEA drag-and-drop feature)
-- **Data Storage**: File handling (`books.txt` and `accounts.txt`)
+- **Data Storage**: File handling (`books.txt`, `accounts.txt`, `history.txt`)
 
 ---
 
