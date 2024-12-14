@@ -11,11 +11,8 @@ public class LoginForm {
     private JPasswordField passwordField;
     private JButton loginButton;
     private JButton createAccountButton;
-    private JLabel messageLabel;
 
-    public JPanel getMainPanel() {
-        return mainPanel;
-    }
+    public JPanel getMainPanel() {return mainPanel;}
 
     public LoginForm() {
         // Action for Login Button
@@ -25,11 +22,33 @@ public class LoginForm {
                 String username = usernameField.getText();
                 String password = new String(passwordField.getPassword());
 
-                if (validateCredentials(username, password)) {
-                    JOptionPane.showMessageDialog(mainPanel, "Login Successful!");
-                    messageLabel.setText("");
+                String role = validateCredentials(username, password);
+                if (role != null) {
+                    if (role.equals("admin")) {
+                        JOptionPane.showMessageDialog(mainPanel, "Welcome admin!");
+                        AdminDashboardForm adminDashboard = new AdminDashboardForm();
+                        JFrame adminDashboardFrame = new JFrame("Admin Menu");
+                        adminDashboardFrame.setContentPane(adminDashboard.getMainPanel());
+                        adminDashboardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                        adminDashboardFrame.pack();
+                        adminDashboardFrame.setLocationRelativeTo(null);
+                        adminDashboardFrame.setVisible(true);
+                        // Hide or dispose of the LoginForm
+                        SwingUtilities.getWindowAncestor(mainPanel).dispose();
+                    } else if (role.equals("user")) {
+                        JOptionPane.showMessageDialog(mainPanel, "Welcome " + username + "!");
+                        UserDashboardForm userDashboard = new UserDashboardForm(username);
+                        JFrame userDashboardFrame = new JFrame("User Menu");
+                        userDashboardFrame.setContentPane(userDashboard.getMainPanel());
+                        userDashboardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                        userDashboardFrame.pack();
+                        userDashboardFrame.setLocationRelativeTo(null);
+                        userDashboardFrame.setVisible(true);
+                        // Hide or dispose of the LoginForm
+                        SwingUtilities.getWindowAncestor(mainPanel).dispose();
+                    }
                 } else {
-                    messageLabel.setText("Invalid username or password.");
+                    JOptionPane.showMessageDialog(mainPanel, "Invalid username or password.");
                 }
             }
         });
@@ -39,8 +58,7 @@ public class LoginForm {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Open Registration Form
-                JFrame registrationFrame = new JFrame("Create Account");
-                RegistrationForm registrationForm = new RegistrationForm();
+                JFrame registrationFrame = new JFrame("Registration Form");
                 registrationFrame.setContentPane(new RegistrationForm().getMainPanel());
                 registrationFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 registrationFrame.pack();
@@ -48,36 +66,29 @@ public class LoginForm {
                 registrationFrame.setVisible(true);
 
                 // Close current Login Form
-                ((JFrame) SwingUtilities.getWindowAncestor(mainPanel)).dispose();
+                SwingUtilities.getWindowAncestor(mainPanel).dispose();
             }
         });
     }
 
-    /**
-     * Validates the credentials against the data in accounts.txt
-     *
-     * @param username The username entered by the user.
-     * @param password The password entered by the user.
-     * @return true if credentials are valid, false otherwise.
-     */
-
-    private boolean validateCredentials(String username, String password) {
+    private String validateCredentials(String username, String password) {
         try (BufferedReader reader = new BufferedReader(new FileReader("accounts.txt"))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(","); // Split line into username and password
-                if (parts.length == 2) {
+                if (parts.length == 3) {
                     String fileUsername = parts[0].trim();
                     String filePassword = parts[1].trim();
+                    String storedRole = parts[2].trim();
 
                     if (fileUsername.equals(username) && filePassword.equals(password)) {
-                        return true; // Match found
+                        return storedRole; // Return the role (admin/user)
                     }
                 }
             }
         } catch (IOException e) {
             JOptionPane.showMessageDialog(mainPanel, "Error reading accounts file.", "Error", JOptionPane.ERROR_MESSAGE);
         }
-        return false; // No match found
+        return null;
     }
 }

@@ -5,13 +5,14 @@ import java.io.IOException;
 public class Main {
     public static void main(String[] args) {
         // Ensure the accounts.txt file exists
-        ensureAccountsFileExists();
-
-        // Create an instance of LoginForm
-        LoginForm loginForm = new LoginForm();
+        ensureFileExists("accounts.txt");
+        ensureFileExists("books.txt");
+        ensureFileExists("history.txt");
+        ensureFileExists("borrowed_books.txt");
 
         // Create a JFrame to hold the LoginForm
         JFrame loginFrame = new JFrame("Login Form");
+        LoginForm loginForm = new LoginForm();
         loginFrame.setContentPane(loginForm.getMainPanel()); // Set the content pane to the main panel from LoginForm
         loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Close the app when window is closed
         loginFrame.pack(); // Resize the frame to fit the components
@@ -19,26 +20,23 @@ public class Main {
         loginFrame.setVisible(true); // Show the frame
     }
 
-    /**
-     * Ensures that the accounts.txt file exists.
-     * If the file doesn't exist, it will create it.
-     */
-    private static void ensureAccountsFileExists() {
-        File file = new File("accounts.txt");
+    private static void ensureFileExists(String fileName) {
+        File file = new File(fileName);
         if (!file.exists()) {
             try {
                 // Create a new file if it doesn't exist
                 boolean created = file.createNewFile();
                 if (created) {
-                    System.out.println("accounts.txt file created.");
+                    System.out.println(fileName + " file created.");
                 } else {
-                    System.out.println("Error creating accounts.txt file.");
+                    System.out.println("Error creating " + fileName + " file.");
                 }
             } catch (IOException e) {
-                System.out.println("Error checking or creating accounts.txt: " + e.getMessage());
+                System.out.println("Error checking or creating " + fileName + ": " + e.getMessage());
             }
         } else {
-            System.out.println("accounts.txt file already exists.");
+            System.out.println(fileName + " file already exists.");
         }
     }
 }
+

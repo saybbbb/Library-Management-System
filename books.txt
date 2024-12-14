@@ -1,0 +1,20 @@
+101,The Great Gatsby,F. Scott Fitzgerald,Yes
+102,1984,George Orwell,Yes
+103,Moby Dick,Herman Melville,Yes
+104,Pride and Prejudice,Jane Austen,Yes
+105,To Kill a Mockingbird,Harper Lee,Yes
+106,The Catcher in the Rye,J.D. Salinger,Yes
+107,The Lord of the Rings,J.R.R. Tolkien,Yes
+108,Animal Farm,George Orwell,Yes
+109,War and Peace,Leo Tolstoy,Yes
+110,The Odyssey,Homer,Yes
+111,Crime and Punishment,Fyodor Dostoevsky,Yes
+112,The Brothers Karamazov,Fyodor Dostoevsky,Yes
+113,Brave New World,Aldous Huxley,Yes
+114,Wuthering Heights,Emily Brontë,Yes
+115,Jane Eyre,Charlotte Brontë,Yes
+116,The Divine Comedy,Dante Alighieri,Yes
+117,Les Misérables,Victor Hugo,Yes
+118,Don Quixote,Miguel de Cervantes,Yes
+119,Ulysses,James Joyce,Yes
+120,The Iliad,Homer,Yes
