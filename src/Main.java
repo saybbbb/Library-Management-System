@@ -8,12 +8,11 @@ public class Main {
         ensureFileExists("accounts.txt");
         ensureFileExists("books.txt");
         ensureFileExists("history.txt");
-
-        // Create an instance of LoginForm
-        LoginForm loginForm = new LoginForm();
+        ensureFileExists("borrowed_books.txt");
 
         // Create a JFrame to hold the LoginForm
         JFrame loginFrame = new JFrame("Login Form");
+        LoginForm loginForm = new LoginForm();
         loginFrame.setContentPane(loginForm.getMainPanel()); // Set the content pane to the main panel from LoginForm
         loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Close the app when window is closed
         loginFrame.pack(); // Resize the frame to fit the components
@@ -41,5 +40,3 @@ public class Main {
     }
 }
 
-// TODO: Fix return book
-// TODO: Refresh table column size

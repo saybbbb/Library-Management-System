@@ -1,15 +1,4 @@
-1,Borrowed,101,The Great Gatsby
-1,Returned,101,The Great Gatsby
-1,Borrowed,101,The Great Gatsby
-1,Returned,101,The Great Gatsby
-ggll,Borrowed,107,The Lord of the Rings
-ggll,Returned,107,The Lord of the Rings
-ggll,Borrowed,108,Animal Farm
-ggll,Returned,108,Animal Farm
-1,Borrowed,101,The Great Gatsby
-1,Returned,101,The Great Gatsby
-1,Borrowed,101,The Great Gatsby
-1,Returned,101,The Great Gatsby
-1,Borrowed,103,Moby Dick
-1,Borrowed,103,Moby Dick
-1,Returned,103,Moby Dick
+1,Borrowed,101,The Great Gatsby,2024-12-14 13:42:43
+1,Returned,101,The Great Gatsby,2024-12-14 13:43:02
+1,Borrowed,105,To Kill a Mockingbird,2024-12-14 13:43:19
+1,Returned,105,To Kill a Mockingbird,2024-12-14 13:43:46
