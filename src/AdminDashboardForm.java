@@ -224,7 +224,8 @@ public class AdminDashboardForm {
                     historyEntry[0],  // User
                     historyEntry[1],  // Action
                     historyEntry[2],  // Book ID
-                    historyEntry[3]   // Book Title
+                    historyEntry[3],  // Book Title
+                    historyEntry[4]   // Timestamp
             };
         }
 
